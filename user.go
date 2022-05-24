@@ -16,3 +16,18 @@ type User struct {
 func (u *User) Map() map[string]interface{} {
 	return structs.Map(u)
 }
+
+// Names function returns field names.
+func (u *User) Names() []string {
+	fields := structs.Fields(u)
+	names := make([]string, len(fields))
+	for i, field := range fields {
+		name := field.Name()
+		tagName := field.Tag(structs.DefaultTagName)
+		if tagName != "" {
+			name = tagName
+		}
+		names[i] = name
+	}
+	return names
+}

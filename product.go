@@ -21,3 +21,18 @@ type Product struct {
 func (p *Product) Map() map[string]interface{} {
 	return structs.Map(p)
 }
+
+// Names function returns field names.
+func (p *Product) Names() []string {
+	fields := structs.Fields(p)
+	names := make([]string, len(fields))
+	for i, field := range fields {
+		name := field.Name()
+		tagName := field.Tag(structs.DefaultTagName)
+		if tagName != "" {
+			name = tagName
+		}
+		names[i] = name
+	}
+	return names
+}

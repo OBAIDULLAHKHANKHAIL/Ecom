@@ -3,6 +3,7 @@ package models
 import (
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestProduct_Map(t *testing.T) {
@@ -13,9 +14,9 @@ func TestProduct_Map(t *testing.T) {
 		Description string
 		Password    string
 		CreatedBy   string
-		CreatedAt   string
+		CreatedAt   time.Time
 		UpdatedBy   string
-		UpdatedAt   string
+		UpdatedAt   time.Time
 	}
 	tests := []struct {
 		name   string
@@ -31,9 +32,9 @@ func TestProduct_Map(t *testing.T) {
 				Description: "Full Seleves T-shirt",
 				Password:    "9876",
 				CreatedBy:   "Obaid",
-				CreatedAt:   "24-may-22",
+				CreatedAt:   time.Now(),
 				UpdatedBy:   "Ali",
-				UpdatedAt:   "25-may-22",
+				UpdatedAt:   time.Now(),
 			},
 			want: map[string]interface{}{
 				"id":          "1234",
@@ -42,9 +43,9 @@ func TestProduct_Map(t *testing.T) {
 				"description": "Full Seleves T-shirt",
 				"password":    "9876",
 				"createdby":   "Obaid",
-				"createdat":   "24-may-22",
+				"createdat":   time.Now(),
 				"updatedby":   "Ali",
-				"updatedat":   "25-may-22",
+				"updatedat":   time.Now(),
 			},
 		},
 	}
@@ -76,9 +77,9 @@ func TestProduct_Names(t *testing.T) {
 		Description string
 		Password    string
 		CreatedBy   string
-		CreatedAt   string
+		CreatedAt   time.Time
 		UpdatedBy   string
-		UpdatedAt   string
+		UpdatedAt   time.Time
 	}
 	tests := []struct {
 		name   string
@@ -94,9 +95,9 @@ func TestProduct_Names(t *testing.T) {
 				Description: "Full Seleves T-shirt",
 				Password:    "9876",
 				CreatedBy:   "Obaid",
-				CreatedAt:   "24-may-22",
+				CreatedAt:   time.Now(),
 				UpdatedBy:   "Ali",
-				UpdatedAt:   "25-may-22",
+				UpdatedAt:   time.Now(),
 			},
 			want: []string{"id", "name", "price", "description", "password", "createdby", "createdat", "updatedby", "updatedat"},
 		},

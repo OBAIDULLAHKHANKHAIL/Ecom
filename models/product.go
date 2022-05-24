@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+
 	"github.com/fatih/structs"
 )
 
@@ -12,9 +14,9 @@ type Product struct {
 	Description string `json:"description" structs:"description" bson:"description" db:"description"`
 	Password    string `json:"password" structs:"password" bson:"password" db:"password"`
 	CreatedBy   string `json:"createdby" structs:"createdby" bson:"createdby" db:"createdby"`
-	CreatedAt   string `json:"createdat" structs:"createdat" bson:"createdat" db:"createdat"`
+	CreatedAt   time.Time `json:"createdat" structs:"createdat" bson:"createdat" db:"createdat"`
 	UpdatedBy   string `json:"updatedby" structs:"updatedby" bson:"updatedby" db:"updatedby"`
-	UpdatedAt   string `json:"updatedat" structs:"updatedat" bson:"updatedat" db:"updatedat"`
+	UpdatedAt   time.Time `json:"updatedat" structs:"updatedat" bson:"updatedat" db:"updatedat"`
 }
 
 // Map function returns map values.

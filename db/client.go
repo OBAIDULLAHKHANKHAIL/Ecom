@@ -2,17 +2,19 @@ package db
 
 import (
 	"log"
-
-	"github.com/OBAIDULLAHKHANKHAIL/Ecom/models"
+	"obaid/models"
 )
 
 // DataStore is an interface for query ops.
 type DataStore interface {
-	AddStudent(product *models.Product) (string, error)
-	UpdateStudent(id string, student *models.Product) error
-	GetStudentByID(id string) (*models.Product, error)
-	ListStudent(filter map[string]interface{}, lim int64, off int64) ([]*models.Product, error)
-	RemoveStudentByID(id string) error
+	AddUser(user *models.User) (string, error)
+	UpdateUser(id string, user *models.User) error
+	GetUserByID(id string) (*models.User, error)
+	AddProduct(product *models.Product) (string, error)
+	GetProductByID(id string) (*models.Product, error)
+	ListProduct(filter map[string]interface{}, lim int64, off int64) ([]*models.Product, error)
+	UpdateProduct(id string, user *models.Product) error
+	RemoveProductByID(id string) error
 }
 
 // Option holds configuration for data store clients.
@@ -25,7 +27,7 @@ type DataStoreFactory func(conf Option) (DataStore, error)
 
 var datastoreFactories = make(map[string]DataStoreFactory)
 
-// Register saves data store into a data store factory.
+// Reister saves data store into a data store factory.
 func Register(name string, factory DataStoreFactory) {
 	if factory == nil {
 		log.Fatalf("Datastore factory %s does not exist.", name)

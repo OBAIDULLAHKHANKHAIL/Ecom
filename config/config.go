@@ -29,9 +29,10 @@ func init() {
 	_ = viper.BindEnv(ServerPort, "SERVER_PORT")
 
 	// defaults
-	viper.SetDefault(DbName, "Ecom_db")
+	viper.SetDefault(DbName, "Ecom_DB")
 	viper.SetDefault(DbHost, "localhost")
 	viper.SetDefault(DbPort, "3306")
 	viper.SetDefault(ServerHost, "127.0.0.1")
 	viper.SetDefault(ServerPort, "8080")
+	viper.SetDefault(DbPass, "my-secret-pw")
 }

@@ -64,7 +64,7 @@ func Test_mysqlStd_UpdateUser(t *testing.T) {
 	}
 	_, _ = m.AddUser(user)
 	type args struct {
-		id      string
+		id   string
 		user *models.User
 	}
 	tests := []struct {
@@ -76,7 +76,7 @@ func Test_mysqlStd_UpdateUser(t *testing.T) {
 			name: "success - update records",
 			args: args{id: user.ID,
 				user: &models.User{
-					ID: user.ID,
+					ID:       user.ID,
 					Name:     "Ali",
 					User:     "dev23",
 					Password: "1231s",
@@ -193,9 +193,9 @@ func Test_mysqlStd_GetProductByID(t *testing.T) {
 		Description: "Turkey #1 Tea",
 		Password:    "1133",
 		CreatedBy:   "Ali",
-		CreatedAt:   time.Date(2022,04,02,12,12,2,0,time.UTC),
+		CreatedAt:   time.Date(2022, 04, 02, 12, 12, 2, 0, time.UTC),
 		UpdatedBy:   "Usman",
-		UpdatedAt:   time.Date(2022,04,02,12,12,2,0,time.UTC),
+		UpdatedAt:   time.Date(2022, 04, 02, 12, 12, 2, 0, time.UTC),
 	}
 	id, err := m.AddProduct(product)
 	if err != nil {
@@ -245,20 +245,22 @@ func Test_mysqlStd_ListProduct(t *testing.T) {
 		Description: "Pakistan #1 Tea",
 		Password:    "1144",
 		CreatedBy:   "zahid",
-		CreatedAt:   time.Date(2022,04,02,12,12,2,0,time.UTC),
+		CreatedAt:   time.Date(2022, 04, 02, 12, 12, 2, 0, time.UTC),
 		UpdatedBy:   "saqib",
-		UpdatedAt:   time.Date(2022,04,02,12,12,2,0,time.UTC),
+		UpdatedAt:   time.Date(2022, 04, 02, 12, 12, 2, 0, time.UTC),
 	}
+
 	Product2 := &models.Product{
 		Name:        "Pink Tea",
 		Price:       499,
 		Description: "US #1 Tea",
 		Password:    "911",
-		CreatedBy:   "zahid",
-		CreatedAt:   time.Date(2022,04,02,12,12,2,0,time.UTC),
+		CreatedBy:   "usama",
+		CreatedAt:   time.Date(2022, 04, 02, 12, 12, 2, 0, time.UTC),
 		UpdatedBy:   "ladin",
-		UpdatedAt:   time.Date(2022,04,02,12,12,2,0,time.UTC),
+		UpdatedAt:   time.Date(2022, 04, 02, 12, 12, 2, 0, time.UTC),
 	}
+
 	_, _ = m.AddProduct(product)
 	_, _ = m.AddProduct(Product2)
 	type args struct {
@@ -274,52 +276,52 @@ func Test_mysqlStd_ListProduct(t *testing.T) {
 	}{
 		{
 			name:    "success- list all Product with name",
-			args:    args{filter: map[string]interface{}{"name": "saqib"}, lim: 1, off: 0},
+			args:    args{filter: map[string]interface{}{"name": "Green Tea"}, lim: 1, off: 0},
 			want:    []*models.Product{product},
 			wantErr: false,
 		},
 		{
 			name:    "fail- list all Product with name",
-			args:    args{filter: map[string]interface{}{"name": "zahid"}, lim: 1, off: 0},
+			args:    args{filter: map[string]interface{}{"name": "Green Tea2"}, lim: 1, off: 0},
 			want:    nil,
 			wantErr: false,
 		},
 		{
-			name:    "success- list all product with name pass",
-			args:    args{filter: map[string]interface{}{"name": "saqib", "password": "114"}, lim: 1, off: 0},
+			name:    "success- list all product with name password",
+			args:    args{filter: map[string]interface{}{"name": "Green Tea", "password": "1144"}, lim: 1, off: 0},
+			want:    []*models.Product{product},
+			wantErr: false,
+		},
+		{
+			name:    "fail- list all products with name password",
+			args:    args{filter: map[string]interface{}{"name": "Green Tea", "password": "1155"}, lim: 1, off: 0},
+			want:    nil,
+			wantErr: false,
+		},
+		{
+			name:    "success- list all product with password ",
+			args:    args{filter: map[string]interface{}{"password": "911"}, lim: 1, off: 0},
 			want:    []*models.Product{Product2},
 			wantErr: false,
 		},
 		{
-			name:    "fail- list all user with name pass",
-			args:    args{filter: map[string]interface{}{"name": "zahid", "password": "911"}, lim: 1, off: 0},
+			name:    "fail- list all product with password",
+			args:    args{filter: map[string]interface{}{"password": "912"}, lim: 1, off: 0},
 			want:    nil,
 			wantErr: false,
 		},
 		{
-			name:    "success- list all user with UpdatedBy ",
-			args:    args{filter: map[string]interface{}{"UpdatedBy": "saqib"}, lim: 1, off: 0},
+			name:    "success- list all students with phone age",
+			args:    args{filter: map[string]interface{}{"createdby": "usama", "updatedby": "ladin"}, lim: 1, off: 0},
 			want:    []*models.Product{Product2},
 			wantErr: false,
 		},
 		{
-			name:    "fail- list all user with phone",
-			args:    args{filter: map[string]interface{}{"UpdatedBy": "zahid"}, lim: 1, off: 0},
+			name:    "fail- list all students with name Hameed age 22",
+			args:    args{filter: map[string]interface{}{"createdby": "zahid2", "updatedby": "saqib2"}, lim: 1, off: 0},
 			want:    nil,
 			wantErr: false,
 		},
-		// {
-		// 	name:    "success- list all user with phone CreatedBy",
-		// 	args:    args{filter: map[string]interface{}{"CreatedBy": "911", "phone": "03217895641"}, lim: 1, off: 0},
-		// 	want:    []*models.Product{product},
-		// 	wantErr: false,
-		// },
-		// {
-		// 	name:    "fail- list all user with name Hameed CreatedBy",
-		// 	args:    args{filter: map[string]interface{}{"CreatedBy": "114", "phone": "031458795149"}, lim: 1, off: 0},
-		// 	want:    nil,
-		// 	wantErr: false,
-		// },
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -329,6 +331,8 @@ func Test_mysqlStd_ListProduct(t *testing.T) {
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
+				fmt.Println(got[0].Name)
+				fmt.Println(tt.want[0].Name)
 				t.Errorf("ListProduct() got = %v, want = %v,diff = %s, error = %v", got, tt.want, diff, err)
 			} else {
 				log().Info(got)
@@ -336,6 +340,7 @@ func Test_mysqlStd_ListProduct(t *testing.T) {
 		})
 	}
 }
+
 func Test_mysqlStd_UpdateProduct(t *testing.T) {
 	os.Setenv("DB_PORT", "3306")
 	os.Setenv("DB_USER", "root")
@@ -387,8 +392,6 @@ func Test_mysqlStd_UpdateProduct(t *testing.T) {
 	}
 }
 
-
-
 func Test_mysqlStd_RemoveProductByID(t *testing.T) {
 	os.Setenv("DB_PORT", "3306")
 	os.Setenv("DB_USER", "root")
@@ -429,4 +432,3 @@ func Test_mysqlStd_RemoveProductByID(t *testing.T) {
 		})
 	}
 }
-

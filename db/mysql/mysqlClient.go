@@ -49,7 +49,6 @@ func (m client) AddUser(user *models.User) (string, error) {
 	if user.ID != "" {
 		return "id is not empty", nil
 	}
-
 	user.ID = guuid.NewV4().String()
 	names := user.Names()
 	if _, err := m.db.NamedExec(fmt.Sprintf(`INSERT INTO user (%s) VALUES(%s)`, strings.Join(names, ","), strings.Join(mkPlaceHolder(names, ":", func(name, prefix string) string {
@@ -87,7 +86,6 @@ func (m client) AddProduct(product *models.Product) (string, error) {
 	if product.ID != "" {
 		return "id is not empty", nil
 	}
-
 	product.ID = guuid.NewV4().String()
 	names := product.Names()
 	if _, err := m.db.NamedExec(fmt.Sprintf(`INSERT INTO product (%s) VALUES(%s)`, strings.Join(names, ","), strings.Join(mkPlaceHolder(names, ":", func(name, prefix string) string {
@@ -96,7 +94,6 @@ func (m client) AddProduct(product *models.Product) (string, error) {
 		product); err != nil {
 		return "", errors.Wrap(err, "failed to add product")
 	}
-	
 	return product.ID, nil
 }
 

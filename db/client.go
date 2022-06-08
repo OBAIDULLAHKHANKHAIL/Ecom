@@ -10,6 +10,7 @@ type DataStore interface {
 	AddUser(user *models.User) (string, error)
 	UpdateUser(id string, user *models.User) error
 	GetUserByID(id string) (*models.User, error)
+	RemoveUserByID(id string) error
 	AddProduct(product *models.Product) (string, error)
 	GetProductByID(id string) (*models.Product, error)
 	ListProduct(filter map[string]interface{}, lim int64, off int64) ([]*models.Product, error)

@@ -82,6 +82,13 @@ func (m client) GetUserByID(id string) (*models.User, error) {
 	return &std, nil
 }
 
+func (m client) RemoveUserByID(id string) error {
+	if _, err := m.db.Exec(fmt.Sprintf(`DELETE FROM user WHERE id= '%s'`, id)); err != nil {
+		return errors.Wrap(err, "failed to delete user")
+	}
+	return nil
+}
+
 func (m client) AddProduct(product *models.Product) (string, error) {
 	if product.ID != "" {
 		return "id is not empty", nil

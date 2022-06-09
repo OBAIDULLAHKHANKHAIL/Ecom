@@ -40,3 +40,4 @@ func Register(name string, factory DataStoreFactory) {
 		return
 	}
 }
+

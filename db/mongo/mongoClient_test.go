@@ -13,7 +13,7 @@ import (
 
 func Test_mongoStd_AddUser(t *testing.T) {
 	os.Setenv("DB_PORT", "27017")
-	os.Setenv("DB_HOST", "ecom-mongo")
+	os.Setenv("DB_HOST", "localhost")
 	type args struct {
 		user *models.User
 	}
@@ -58,7 +58,7 @@ func Test_mongoStd_AddUser(t *testing.T) {
 
 func Test_mongoStd_UpdateUser(t *testing.T) {
 	os.Setenv("DB_PORT", "27017")
-	os.Setenv("DB_HOST", "ecom-mongo")
+	os.Setenv("DB_HOST", "localhost")
 
 	m, _ := NewMongoClient(db.Option{})
 	user := &models.User{
@@ -99,7 +99,7 @@ func Test_mongoStd_UpdateUser(t *testing.T) {
 
 func Test_mongoStd_GetUserByID(t *testing.T) {
 	os.Setenv("DB_PORT", "27017")
-	os.Setenv("DB_HOST", "ecom-mongo")
+	os.Setenv("DB_HOST", "localhost")
 
 	m, _ := NewMongoClient(db.Option{})
 	user := &models.User{
@@ -142,7 +142,7 @@ func Test_mongoStd_GetUserByID(t *testing.T) {
 
 func Test_mongoStd_RemoveUserByID(t *testing.T) {
 	os.Setenv("DB_PORT", "27017")
-	os.Setenv("DB_HOST", "ecom-mongo")
+	os.Setenv("DB_HOST", "localhost")
 
 	m, _ := NewMongoClient(db.Option{})
 	user := &models.User{
@@ -180,7 +180,7 @@ func Test_mongoStd_RemoveUserByID(t *testing.T) {
 
 func Test_mongoStd_AddProduct(t *testing.T) {
 	os.Setenv("DB_PORT", "27017")
-	os.Setenv("DB_HOST", "ecom-mongo")
+	os.Setenv("DB_HOST", "localhost")
 	type args struct {
 		product *models.Product
 	}
@@ -232,7 +232,7 @@ func Test_mongoStd_AddProduct(t *testing.T) {
 
 func Test_mongoStd_UpdateProduct(t *testing.T) {
 	os.Setenv("DB_PORT", "27017")
-	os.Setenv("DB_HOST", "ecom-mongo")
+	os.Setenv("DB_HOST", "localhost")
 
 	m, _ := NewMongoClient(db.Option{})
 	product := &models.Product{
@@ -283,7 +283,7 @@ func Test_mongoStd_UpdateProduct(t *testing.T) {
 
 func Test_mongoStd_GetProductByID(t *testing.T) {
 	os.Setenv("DB_PORT", "27017")
-	os.Setenv("DB_HOST", "ecom-mongo")
+	os.Setenv("DB_HOST", "localhost")
 
 	m, _ := NewMongoClient(db.Option{})
 	product := &models.Product{
@@ -331,7 +331,7 @@ func Test_mongoStd_GetProductByID(t *testing.T) {
 
 func Test_mongoStd_RemoveProductByID(t *testing.T) {
 	os.Setenv("DB_PORT", "27017")
-	os.Setenv("DB_HOST", "ecom-mongo")
+	os.Setenv("DB_HOST", "localhost")
 
 	m, _ := NewMongoClient(db.Option{})
 	product := &models.Product{
@@ -374,7 +374,7 @@ func Test_mongoStd_RemoveProductByID(t *testing.T) {
 
 func Test_mongoStd_ListProduct(t *testing.T) {
 	os.Setenv("DB_PORT", "27017")
-	os.Setenv("DB_HOST", "ecom-mongo")
+	os.Setenv("DB_HOST", "localhost")
 	m, _ := NewMongoClient(db.Option{})
 	product1 := &models.Product{
 		Name:        "Black Tea",
@@ -417,25 +417,25 @@ func Test_mongoStd_ListProduct(t *testing.T) {
 		},
 		{
 			name:    "fail- list all product with name",
-			args:    args{filter: map[string]interface{}{"name": "Green Tea"}, lim: 1, off: 0},
+			args:    args{filter: map[string]interface{}{"name": "Greens Tea"}, lim: 1, off: 0},
 			want:    nil,
 			wantErr: false,
 		},
 		{
 			name:    "success- list all product with name createdby",
-			args:    args{filter: map[string]interface{}{"name": "Black Tea", "createdby": "zahid"}, lim: 1, off: 0},
+			args:    args{filter: map[string]interface{}{"name": "Black Tea", "createdby": "Ali"}, lim: 1, off: 0},
 			want:    []*models.Product{product1},
 			wantErr: false,
 		},
 		{
 			name:    "fail- list all students with name createdby",
-			args:    args{filter: map[string]interface{}{"name": "Green Tea", "level": "saqib"}, lim: 1, off: 0},
+			args:    args{filter: map[string]interface{}{"name": "Green Tea", "level": "zahid"}, lim: 1, off: 0},
 			want:    nil,
 			wantErr: false,
 		},
 		{
 			name:    "success- list all students with updatedby ",
-			args:    args{filter: map[string]interface{}{"updatedby": "usman"}, lim: 1, off: 0},
+			args:    args{filter: map[string]interface{}{"updatedby": "saqib"}, lim: 1, off: 0},
 			want:    []*models.Product{product2},
 			wantErr: false,
 		},
@@ -447,7 +447,7 @@ func Test_mongoStd_ListProduct(t *testing.T) {
 		},
 		{
 			name:    "success- list all students with name price",
-			args:    args{filter: map[string]interface{}{"name": "Black Tea", "price": 499}, lim: 1, off: 0},
+			args:    args{filter: map[string]interface{}{"name": "Green Tea", "price": 499}, lim: 1, off: 0},
 			want:    []*models.Product{product2},
 			wantErr: false,
 		},

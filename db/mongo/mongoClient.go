@@ -16,8 +16,12 @@ import (
 	"obaid/models"
 )
 
+type DbInstance struct {
+	DataB *mongo.Database
+}
+
 const (
-	usersCollection = "Users"
+	usersCollection    = "Users"
 	productsCollection = "Products"
 )
 
@@ -41,13 +45,12 @@ func NewMongoClient(conf db.Option) (db.DataStore, error) {
 	return &client{conn: cli}, nil
 }
 
-
-
 func (m client) AddUser(user *models.User) (string, error) {
-	if user.ID != "" {
-		return "id is not empty", nil
+	if user.ID == "" {
+		return "id is empty", nil
 	}
 	user.ID = guuid.NewV4().String()
+
 	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(usersCollection)
 	if _, err := collection.InsertOne(context.TODO(), user); err != nil {
 		return "", errors.Wrap(err, "failed to add user")
@@ -85,11 +88,8 @@ func (m client) GetUserByID(id string) (*models.User, error) {
 	return stu, nil
 }
 
-
-
-
 func (m client) AddProduct(product *models.Product) (string, error) {
-	if product.ID != "" {
+	if product.ID == "" {
 		return "id is not empty", nil
 	}
 	product.ID = guuid.NewV4().String()
@@ -100,7 +100,6 @@ func (m client) AddProduct(product *models.Product) (string, error) {
 	return product.ID, nil
 }
 
-
 func (m client) UpdateProduct(id string, product *models.Product) error {
 	product.ID = id
 	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(productsCollection)
@@ -109,7 +108,6 @@ func (m client) UpdateProduct(id string, product *models.Product) error {
 	}
 	return nil
 }
-
 
 func (m client) GetProductByID(id string) (*models.Product, error) {
 	var stu *models.Product
@@ -123,7 +121,6 @@ func (m client) GetProductByID(id string) (*models.Product, error) {
 	return stu, nil
 }
 
-
 func (m client) RemoveProductByID(id string) error {
 	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(productsCollection)
 	if _, err := collection.DeleteOne(context.TODO(), bson.M{"_id": id}); err != nil {
@@ -132,7 +129,6 @@ func (m client) RemoveProductByID(id string) error {
 
 	return nil
 }
-
 
 func (m client) ListProduct(filter map[string]interface{}, lim int64, off int64) ([]*models.Product, error) {
 	var std []*models.Product

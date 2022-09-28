@@ -1,0 +1,290 @@
+---
+swagger: "2.0"
+info:
+  description: "Ecom"
+  version: "0.0.1"
+  title: "Ecom System"
+host: "localhost:8080"
+basePath: "/"
+schemes:
+  - "http"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+paths:
+  /user:
+    get:
+      operationId: "ListUser"
+      parameters:
+        - in: "query"
+          name: "name"
+          description: "filter's details"
+          type: "string"
+        - in: "query"
+          name: "user"
+          description: "filter's details"
+          type: "string"
+        - in: "query"
+          name: "password"
+          description: "filter's details"
+          type: "string"
+        - in: "query"
+          name: "offset"
+          description: "The number of items to skip before starting to collect the result set"
+          type: "integer"
+        - in: "query"
+          name: "limit"
+          description: "The numbers of items to return"
+          type: "integer"
+      description: "get all the users"
+      responses:
+        200:
+          description: "user response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/user"
+        500:
+          description: "internal server error"
+    post:
+      operationId: "addUser"
+      parameters:
+        - in: "body"
+          name: "user"
+          description: "user's details"
+          required: false
+          schema:
+            $ref: "#/definitions/user"
+      responses:
+        201:
+          description: "user added"
+          schema:
+            $ref: "#/definitions/user"
+        409:
+          description: "user already exists"
+        500:
+          description: "internal server error"
+  
+  /Product/{ID}:
+    put:
+      operationId: "updateProduct"
+      parameters:
+        - in: "path"
+          type: "string"
+          name: "ID"
+          required: true
+          description: "UUID of the product"
+        - in: "body"
+          name: "product"
+          description: "product's details"
+          required: false
+          schema:
+            $ref: "#/definitions/product"
+      responses:
+        200:
+          description: "product updated"
+          schema:
+            $ref: "#/definitions/product"
+        500:
+          description: "internal server error"
+
+    delete:
+      operationId: "DeleteProduct"
+      parameters:
+        - in: "path"
+          name: "ID"
+          type: "string"
+          description: "UUID of the product"
+          required: true
+      description: "delete product with id provided in url"
+      responses:
+        204:
+          description: "product deleted"
+        404:
+          description: "product not found"
+        500:
+          description: "internal server error"
+
+    get:
+      operationId: "getProduct"
+      parameters:
+        - in: "path"
+          type: "string"
+          name: "ID"
+          required: true
+          description: "UUID of the product"
+      description: "return product based on UUID"
+      responses:
+        200:
+          description: "product response"
+          schema:
+            $ref: "#/definitions/product"
+        404:
+          description: "product not found"
+        500:
+          description: "internal server error"
+  /product:
+    get:
+      operationId: "ListProduct"
+      parameters:
+        - in: "query"
+          name: "name"
+          description: "filter's details"
+          type: "string"
+        - in: "query"
+          name: "price"
+          description: "filter's details"
+          type: "integer"
+        - in: "query"
+          name: "description"
+          description: "filter's details"
+          type: "string"
+        - in: "query"
+          name: "password"
+          description: "filter's details"
+          type: "string"
+        - in: "query"
+          name: "createdby"
+          description: "filter's details"
+          type: "string"
+        - in: "query"
+          name: "createdat"
+          description: "filter's details"
+          type: "time.Time"
+        - in: "query"
+          name: "updatedby"
+          description: "filter's details"
+          type: "string"
+        - in: "query"
+          name: "updatedat"
+          description: "filter's details"
+          type: "time.Time"
+        - in: "query"
+          name: "offset"
+          description: "The number of items to skip before starting to collect the result set"
+          type: "integer"
+        - in: "query"
+          name: "limit"
+          description: "The numbers of items to return"
+          type: "integer"
+      description: "get all the products"
+      responses:
+        200:
+          description: "product response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/product"
+        500:
+          description: "internal server error"
+    post:
+      operationId: "addProduct"
+      parameters:
+        - in: "body"
+          name: "product"
+          description: "product's details"
+          required: false
+          schema:
+            $ref: "#/definitions/product"
+      responses:
+        201:
+          description: "product added"
+          schema:
+            $ref: "#/definitions/product"
+        409:
+          description: "product already exists"
+        500:
+          description: "internal server error"
+  /product/{ID}:
+    put:
+      operationId: "updateProduct"
+      parameters:
+        - in: "path"
+          type: "string"
+          name: "ID"
+          required: true
+          description: "UUID of the product"
+        - in: "body"
+          name: "product"
+          description: "product's details"
+          required: false
+          schema:
+            $ref: "#/definitions/product"
+      responses:
+        200:
+          description: "product updated"
+          schema:
+            $ref: "#/definitions/product"
+        500:
+          description: "internal server error"
+
+    delete:
+      operationId: "DeleteProduct"
+      parameters:
+        - in: "path"
+          name: "ID"
+          type: "string"
+          description: "UUID of the product"
+          required: true
+      description: "delete product with id provided in url"
+      responses:
+        204:
+          description: "product deleted"
+        404:
+          description: "product not found"
+        500:
+          description: "internal server error"
+
+    get:
+      operationId: "getProduct"
+      parameters:
+        - in: "path"
+          type: "string"
+          name: "ID"
+          required: true
+          description: "UUID of the product"
+      description: "return product based on UUID"
+      responses:
+        200:
+          description: "product response"
+          schema:
+            $ref: "#/definitions/product"
+        404:
+          description: "product not found"
+        500:
+          description: "internal server error"
+definitions:
+  User:
+    type: "object"
+    properties:
+      ID:
+        type: "string"
+      Name:
+        type: "string"
+      User:
+        type: "string"
+      Password:
+        type: "string"
+  Product:
+    type: "object"
+    properties:
+      ID:
+        type: "string"
+      Name:
+        type: "string"
+      Price:      
+        type: "int"      
+      description:
+        type: "string"   
+      Password:    
+        type: "string"    
+      CreatedBy:   
+        type: "string"   
+      CreatedAt:   
+        type: "time.Time" 
+      UpdatedBy:   
+        type: "string"    
+      UpdatedAt:   
+        type: "time.Time" 
+      

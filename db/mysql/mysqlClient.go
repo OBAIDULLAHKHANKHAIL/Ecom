@@ -16,7 +16,7 @@ import (
 	"obaid/models"
 )
 
-type client struct {
+type Client struct {
 	db *sqlx.DB
 }
 
@@ -42,10 +42,10 @@ func NewMysqlClient(conf db.Option) (db.DataStore, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to connect")
 	}
-	return &client{db: cli}, nil
+	return &Client{db: cli}, nil
 }
 
-func (m client) AddUser(user *models.User) (string, error) {
+func (m Client) AddUser(user *models.User) (string, error) {
 	if user.ID != "" {
 		return "id is not empty", nil
 	}
@@ -60,7 +60,7 @@ func (m client) AddUser(user *models.User) (string, error) {
 	return user.ID, nil
 }
 
-func (m client) UpdateUser(id string, user *models.User) error {
+func (m Client) UpdateUser(id string, user *models.User) error {
 	names := user.Names()
 	if _, err := m.db.NamedExec(fmt.Sprintf(`UPDATE user SET %s WHERE id = '%s'`, strings.Join(mkPlaceHolder(names, "=:", func(name, prefix string) string {
 		return name + prefix + name
@@ -70,7 +70,7 @@ func (m client) UpdateUser(id string, user *models.User) error {
 	return nil
 }
 
-func (m client) GetUserByID(id string) (*models.User, error) {
+func (m Client) GetUserByID(id string) (*models.User, error) {
 	var std models.User
 	if err := m.db.Get(&std, fmt.Sprintf(`SELECT * FROM user WHERE id='%s'`, id)); err != nil {
 		if sql.ErrNoRows != nil {
@@ -82,14 +82,14 @@ func (m client) GetUserByID(id string) (*models.User, error) {
 	return &std, nil
 }
 
-func (m client) RemoveUserByID(id string) error {
+func (m Client) RemoveUserByID(id string) error {
 	if _, err := m.db.Exec(fmt.Sprintf(`DELETE FROM user WHERE id= '%s'`, id)); err != nil {
 		return errors.Wrap(err, "failed to delete user")
 	}
 	return nil
 }
 
-func (m client) AddProduct(product *models.Product) (string, error) {
+func (m Client) AddProduct(product *models.Product) (string, error) {
 	if product.ID != "" {
 		return "id is not empty", nil
 	}
@@ -104,7 +104,7 @@ func (m client) AddProduct(product *models.Product) (string, error) {
 	return product.ID, nil
 }
 
-func (m client) GetProductByID(id string) (*models.Product, error) {
+func (m Client) GetProductByID(id string) (*models.Product, error) {
 	var std models.Product
 	if err := m.db.Get(&std, fmt.Sprintf(`SELECT * FROM product WHERE ID='%s'`, id)); err != nil {
 		if sql.ErrNoRows != nil {
@@ -116,7 +116,7 @@ func (m client) GetProductByID(id string) (*models.Product, error) {
 	return &std, nil
 }
 
-func (m client) ListProduct(filter map[string]interface{}, lim int64, off int64) ([]*models.Product, error) {
+func (m Client) ListProduct(filter map[string]interface{}, lim int64, off int64) ([]*models.Product, error) {
 	var stdList []*models.Product
 	if err := m.db.Select(&stdList, fmt.Sprintf("SELECT * FROM product %s LIMIT %d,%d", mkFilter(filter), off, lim)); err != nil {
 		if sql.ErrNoRows != nil {
@@ -128,14 +128,14 @@ func (m client) ListProduct(filter map[string]interface{}, lim int64, off int64)
 	return stdList, nil
 }
 
-func (m client) RemoveProductByID(id string) error {
+func (m Client) RemoveProductByID(id string) error {
 	if _, err := m.db.Exec(fmt.Sprintf(`DELETE FROM product WHERE id= '%s'`, id)); err != nil {
 		return errors.Wrap(err, "failed to delete product")
 	}
 	return nil
 }
 
-func (m client) UpdateProduct(id string, product *models.Product) error {
+func (m Client) UpdateProduct(id string, product *models.Product) error {
 	names := product.Names()
 	if _, err := m.db.NamedExec(fmt.Sprintf(`UPDATE product SET %s WHERE id = '%s'`, strings.Join(mkPlaceHolder(names, "=:", func(name, prefix string) string {
 		return name + prefix + name
@@ -145,7 +145,7 @@ func (m client) UpdateProduct(id string, product *models.Product) error {
 	return nil
 }
 
-// func (m client) GetProductByID(id string) (*models.Product, error) {
+// func (m Client) GetProductByID(id string) (*models.Product, error) {
 // 	var std models.Product
 // 	if err := m.db.Get(&std, fmt.Sprintf(`SELECT * FROM product WHERE id='%s'`, id)); err != nil {
 // 		if sql.ErrNoRows != nil {

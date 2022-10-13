@@ -3,7 +3,6 @@ package mongo
 import (
 	"context"
 	"fmt"
-
 	"github.com/pkg/errors"
 	guuid "github.com/satori/go.uuid"
 	"github.com/spf13/viper"
@@ -16,8 +15,13 @@ import (
 	"obaid/models"
 )
 
+type DbInstance struct {
+	DataB *mongo.Database
+}
+
 const (
-	collectionName = "User"
+	usersCollection    = "Users"
+	productsCollection = "Products"
 )
 
 func init() {
@@ -41,11 +45,12 @@ func NewMongoClient(conf db.Option) (db.DataStore, error) {
 }
 
 func (m client) AddUser(user *models.User) (string, error) {
-	if user.ID != "" {
-		return "id is not empty", nil
+	if user.ID == "" {
+		return "id is empty", nil
 	}
 	user.ID = guuid.NewV4().String()
-	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(collectionName)
+
+	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(usersCollection)
 	if _, err := collection.InsertOne(context.TODO(), user); err != nil {
 		return "", errors.Wrap(err, "failed to add user")
 	}
@@ -54,7 +59,7 @@ func (m client) AddUser(user *models.User) (string, error) {
 
 func (m client) UpdateUser(id string, user *models.User) error {
 	user.ID = id
-	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(collectionName)
+	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(usersCollection)
 	if _, err := collection.UpdateOne(context.TODO(), bson.M{"_id": bson.M{"$eq": user.ID}}, bson.M{"$set": user}); err != nil {
 		return errors.Wrap(err, "failed to update user")
 	}
@@ -62,7 +67,7 @@ func (m client) UpdateUser(id string, user *models.User) error {
 }
 
 func (m client) RemoveUserByID(id string) error {
-	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(collectionName)
+	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(usersCollection)
 	if _, err := collection.DeleteOne(context.TODO(), bson.M{"_id": id}); err != nil {
 		return errors.Wrap(err, "failed to delete user")
 	}
@@ -72,7 +77,7 @@ func (m client) RemoveUserByID(id string) error {
 
 func (m client) GetUserByID(id string) (*models.User, error) {
 	var stu *models.User
-	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(collectionName)
+	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(usersCollection)
 	if err := collection.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&stu); err != nil {
 		if mongo.ErrNoDocuments != nil {
 			return nil, errors.Wrap(err, "failed to fetch user....not found")
@@ -82,35 +87,30 @@ func (m client) GetUserByID(id string) (*models.User, error) {
 	return stu, nil
 }
 
-
-
-
 func (m client) AddProduct(product *models.Product) (string, error) {
-	if product.ID != "" {
+	if product.ID == "" {
 		return "id is not empty", nil
 	}
 	product.ID = guuid.NewV4().String()
-	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(collectionName)
+	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(productsCollection)
 	if _, err := collection.InsertOne(context.TODO(), product); err != nil {
 		return "", errors.Wrap(err, "failed to add product")
 	}
 	return product.ID, nil
 }
 
-
 func (m client) UpdateProduct(id string, product *models.Product) error {
 	product.ID = id
-	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(collectionName)
+	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(productsCollection)
 	if _, err := collection.UpdateOne(context.TODO(), bson.M{"_id": bson.M{"$eq": product.ID}}, bson.M{"$set": product}); err != nil {
 		return errors.Wrap(err, "failed to update product")
 	}
 	return nil
 }
 
-
 func (m client) GetProductByID(id string) (*models.Product, error) {
 	var stu *models.Product
-	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(collectionName)
+	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(productsCollection)
 	if err := collection.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&stu); err != nil {
 		if mongo.ErrNoDocuments != nil {
 			return nil, errors.Wrap(err, "failed to fetch product....not found")
@@ -120,9 +120,8 @@ func (m client) GetProductByID(id string) (*models.Product, error) {
 	return stu, nil
 }
 
-
 func (m client) RemoveProductByID(id string) error {
-	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(collectionName)
+	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(productsCollection)
 	if _, err := collection.DeleteOne(context.TODO(), bson.M{"_id": id}); err != nil {
 		return errors.Wrap(err, "failed to delete product")
 	}
@@ -130,10 +129,9 @@ func (m client) RemoveProductByID(id string) error {
 	return nil
 }
 
-
 func (m client) ListProduct(filter map[string]interface{}, lim int64, off int64) ([]*models.Product, error) {
 	var std []*models.Product
-	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(collectionName)
+	collection := m.conn.Database(viper.GetString(config.DbName)).Collection(productsCollection)
 	cursor, err := collection.Find(context.TODO(), filter, &options.FindOptions{
 		Skip:  &off,
 		Limit: &lim,

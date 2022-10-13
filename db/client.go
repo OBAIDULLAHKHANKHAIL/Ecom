@@ -14,7 +14,7 @@ type DataStore interface {
 	AddProduct(product *models.Product) (string, error)
 	GetProductByID(id string) (*models.Product, error)
 	ListProduct(filter map[string]interface{}, lim int64, off int64) ([]*models.Product, error)
-	UpdateProduct(id string, user *models.Product) error
+	UpdateProduct(id string, product *models.Product) error
 	RemoveProductByID(id string) error
 }
 
@@ -40,3 +40,4 @@ func Register(name string, factory DataStoreFactory) {
 		return
 	}
 }
+

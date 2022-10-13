@@ -1,0 +1,83 @@
+/*
+///////////////////////////
+//        Terminal       //
+///////////////////////////
+
+go mod init example.com/go-usermgmt-grpc
+go get google.golang.org/grpc
+
+*/
+
+syntax = "proto3";
+
+package obaid;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+// Set name of New Folder you want to create to save *.pb.proto files 
+option go_package = "/pb;obaid";
+
+service ProductManagement {
+  rpc CreateNewProduct(NewProduct) returns (Product) {}
+  rpc GetProducts (google.protobuf.Empty) returns (stream Product) {}
+  rpc GetProductByID (ProductID) returns (Product) {}
+  rpc UpdateProduct (Product) returns (Product) {}
+  rpc DeleteProduct (ProductID) returns (google.protobuf.Empty) {}
+}
+
+message NewProduct {
+  string name = 1;
+  string price = 2;
+  string description = 3;
+  string password = 4;
+  string createdby = 5;
+  google.protobuf.Timestamp createdat = 6;
+  string updatedby = 7;
+  google.protobuf.Timestamp updatedat = 8;
+}
+
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string price = 3;
+  string description = 4;
+  string password = 5;
+  string createdby = 6;
+  google.protobuf.Timestamp createdat = 7;
+  string updatedby = 8;
+  google.protobuf.Timestamp updatedat = 9;   
+}
+
+message GetProductsParams {
+
+}
+
+// message ProductsList {
+//   repeated Product products = 1;
+// }
+
+message ProductID {
+  string id = 1;
+}
+
+/*
+///////////////////////////
+//        Terminal       //
+///////////////////////////
+
+// If you want to generate and save *.pb.go file in same folder 
+// where *.proto file is saved, then run the following command:
+
+protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. 
+       --go-grpc_opt=paths=source_relative usermgmt/usermgmt.proto 
+
+
+// If you want to generate and save *.pb.go in new folder 
+// which you had defined in "option go_package = "/pb;go_usermgmt_grpc";" 
+
+protoc --go_out=. --go_opt=paths=import --go-grpc_out=. 
+       --go-grpc_opt=paths=import usermgmt/usermgmt.proto
+
+*/

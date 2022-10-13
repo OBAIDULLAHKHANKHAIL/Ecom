@@ -3,7 +3,6 @@ package mongo
 import (
 	"context"
 	"fmt"
-
 	"github.com/pkg/errors"
 	guuid "github.com/satori/go.uuid"
 	"github.com/spf13/viper"
